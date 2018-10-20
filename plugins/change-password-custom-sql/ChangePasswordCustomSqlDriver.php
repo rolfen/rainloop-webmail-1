@@ -25,11 +25,6 @@ class ChangePasswordCustomSqlDriver implements \RainLoop\Providers\ChangePasswor
 	/**
 	 * @var string
 	 */
-	private $mTable = '';
-
-	/**
-	 * @var string
-	 */
 	private $mSql = '';
 
 	/**
@@ -78,17 +73,6 @@ class ChangePasswordCustomSqlDriver implements \RainLoop\Providers\ChangePasswor
 	public function SetmDatabase($mDatabase)
 	{
 		$this->mDatabase = $mDatabase;
-		return $this;
-	}
-
-	/**
-	 * @param string $mTable
-	 *
-	 * @return \ChangePasswordCustomSqlDriver
-	 */
-	public function SetmTable($mTable)
-	{
-		$this->mTable = $mTable;
 		return $this;
 	}
 
@@ -160,13 +144,6 @@ class ChangePasswordCustomSqlDriver implements \RainLoop\Providers\ChangePasswor
 			$sEmailUser = \MailSo\Base\Utils::GetAccountNameFromEmail($sEmail);
 			$sEmailDomain = \MailSo\Base\Utils::GetDomainFromEmail($sEmail);
 
-			// some variables cannot be prepared
-			$this->mSql = str_replace(array(
-				':table'
-			), array(
-				$this->mTable
-			), $this->mSql);
-
 			$placeholders = array(
 				':email' => $sEmail,
 				':oldpass' => $sPrevPassword, 
@@ -180,10 +157,6 @@ class ChangePasswordCustomSqlDriver implements \RainLoop\Providers\ChangePasswor
 
 			foreach($placeholders as $placeholder => $value) {
 				if(preg_match_all('/'.$placeholder . '(?![a-zA-Z0-9\-])'.'/', $this->mSql) === 1) {
-					// backwards-compabitibility: remove single and double quotes around placeholders
-					$this->mSql = str_replace('`'.$placeholder.'`', $placeholder, $this->mSql);
-					$this->mSql = str_replace("'".$placeholder."'", $placeholder, $this->mSql);
-					$this->mSql = str_replace('"'.$placeholder.'"', $placeholder, $this->mSql);
 					$used_placeholders[$placeholder] = $value;
 				}
 			}

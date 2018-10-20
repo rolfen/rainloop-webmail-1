@@ -24,7 +24,6 @@ class ChangePasswordCustomSqlPlugin extends \RainLoop\Plugins\AbstractPlugin
 					->SetmUser($this->Config()->Get('plugin', 'mUser', ''))
 					->SetmPass($this->Config()->Get('plugin', 'mPass', ''))
 					->SetmDatabase($this->Config()->Get('plugin', 'mDatabase', ''))
-					->SetmTable($this->Config()->Get('plugin', 'mTable', ''))
 					->SetmSql($this->Config()->Get('plugin', 'mSql', ''))
 				;
 				break;
@@ -43,10 +42,9 @@ class ChangePasswordCustomSqlPlugin extends \RainLoop\Plugins\AbstractPlugin
 			\RainLoop\Plugins\Property::NewInstance('mPass')->SetLabel('MySQL Password')
 				->SetType(\RainLoop\Enumerations\PluginPropertyType::PASSWORD),
 			\RainLoop\Plugins\Property::NewInstance('mDatabase')->SetLabel('MySQL Database'),
-			\RainLoop\Plugins\Property::NewInstance('mTable')->SetLabel('MySQL Table'),
 			\RainLoop\Plugins\Property::NewInstance('mSql')->SetLabel('SQL statement')
 				->SetType(\RainLoop\Enumerations\PluginPropertyType::STRING_TEXT)
-				->SetDescription('SQL statement (allowed wildcards :table, :email, :oldpass, :newpass, :domain, :username). When using MD5 OR SHA1 at tables, write it directly here as SQL functions. Fro non-SQL encryptions use another plugin or wait for new version.')
+				->SetDescription('SQL statement (allowed wildcards :email, :oldpass, :newpass, :domain, :username).')
 				->SetDefaultValue('UPDATE :table SET password = md5(:newpass) WHERE domain = :domain AND username = :username and oldpass = md5(:oldpass)')
 		);
 	}
